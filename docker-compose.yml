@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  gaston:
+    build: ./gaston
+    volumes:
+      - ./agent:/agent
+    depends_on:
+      - igotta
+    networks:
+      - other-containers
+  igotta:
+    build: ./proxy
+    volumes:
+      - ./logs:/var/log/squid
+    networks:
+      - other-containers
+      - public-network
+  alphonse:
+    build: ./alphonse
+    networks:
+      - other-containers
+    volumes:
+      - ./agent:/agent
+    depends_on:
+      - gaston
+      - igotta
+
+networks:
+  # a container-to-container network that doesn't provide access externally
+  other-containers:
+    driver: bridge
+    internal: true
+  # a network that does provide external access
+  public-network:
+    driver: bridge

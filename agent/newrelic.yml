@@ -1,0 +1,66 @@
+common: &default_settings
+  license_key: '<%= Your license key! =%>'
+
+  # distributed tracing is required for Infinite Tracing.
+  distributed_tracing:
+    enabled: true
+
+  # Uncomment this if you have a trace observer you want to test with.
+  # infinite_tracing:
+  #   trace_observer:
+  #     host: 'your Infinite Tracing host, if you want to test.'
+
+  # Configures the standard collector connection to use the proxy.
+  proxy_host: igotta
+  proxy_port: 3128
+
+  # These are all settings out of the stock newrelic.yml; I left them here for completeness.
+  agent_enabled: true
+  high_security: false
+  enable_auto_app_naming: false
+  enable_auto_transaction_naming: true
+  log_level: info
+  audit_mode: false
+  log_file_name: STDOUT
+  max_stack_trace_lines: 30
+  attributes:
+    enabled: true
+  transaction_tracer:
+    enabled: true
+    transaction_threshold: apdex_f
+    record_sql: obfuscated
+    log_sql: false
+    stack_trace_threshold: 0.5
+    explain_enabled: true
+    explain_threshold: 0.5
+    top_n: 20
+  error_collector:
+    enabled: true
+    ignore_errors: akka.actor.ActorKilledException
+    ignore_status_codes: 404
+  transaction_events:
+    enabled: true
+    max_samples_stored: 2000
+  cross_application_tracer:
+    enabled: false
+  thread_profiler:
+    enabled: true
+  browser_monitoring:
+    auto_instrument: true
+  class_transformer:
+    com.newrelic.instrumentation.servlet-user:
+      enabled: false
+    com.newrelic.instrumentation.spring-aop-2:
+      enabled: false
+    com.newrelic.instrumentation.jdbc-resultset:
+      enabled: false
+    classloader_excludes:
+      groovy.lang.GroovyClassLoader$InnerLoader,
+      org.codehaus.groovy.runtime.callsite.CallSiteClassLoader,
+      com.collaxa.cube.engine.deployment.BPELClassLoader,
+      org.springframework.data.convert.ClassGeneratingEntityInstantiator$ObjectInstantiatorClassGenerator,
+      org.mvel2.optimizers.impl.asm.ASMAccessorOptimizer$ContextClassLoader,
+      gw.internal.gosu.compiler.SingleServingGosuClassLoader,
+  labels:
+production:
+  <<: *default_settings
